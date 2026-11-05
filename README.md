@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Daylight
 
-## Getting Started
+A responsive, local-first todo prototype built with Next.js, React, TypeScript, and CSS. No external service, account, API key, or database is required.
 
-First, run the development server:
+## Run locally
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```sh
+npm install
+npm run dev -- --hostname 0.0.0.0 --port 3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Add and edit tasks with optional due dates, category, and importance.
+- Complete or reopen tasks, delete with undo, and clear completed tasks.
+- Filter by all tasks, today, important, completed, or category.
+- Search titles and sort by creation, due date, or alphabetical order.
+- Progress summary, friendly empty states, keyboard-accessible native dialogs, and phone layout.
+- Browser localStorage persistence with schema validation and a visible warning when storage fails.
 
-## Learn More
+## Checks
 
-To learn more about Next.js, take a look at the following resources:
+With the dev server running:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```sh
+npm run lint
+npx tsc --noEmit
+npm run build
+npx playwright install chromium
+npm run test:e2e
+npm audit --omit=dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Set `BASE_URL` to test another running app URL. Playwright covers the complete task lifecycle, persistence, filters, search, sorting, form validation, empty-state persistence, and mobile creation/overflow checks. Tests start with fresh browser contexts.
 
-## Deploy on Vercel
+## Prototype choices
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Single-user app without login or cloud sync; tasks are specific to the current browser and origin. Clearing site storage removes them.
+- The first visit includes five editable sample tasks to demonstrate the app. An intentionally empty saved workspace stays empty after reload.
+- Fixed Personal, Work, and Learning categories; dates follow the user's local time zone. Today means tasks due today.
+- Deletion offers one-level undo; bulk clearing completed tasks is permanent.
+- No reminders, backend, analytics, or external font/image dependencies. Multi-device persistence would require a backend/database and a user identity or shared workspace mechanism.
+- Dependency patches were applied to the starter. The production dependency audit is clean; the full audit still reports eight moderate findings in development-only lint tooling. No forced major lint-tool dependency overrides were applied.
